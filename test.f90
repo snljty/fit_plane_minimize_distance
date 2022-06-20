@@ -11,7 +11,7 @@ program main
     character(len=128) :: buf
     character(len=2), dimension(:), allocatable :: elems
     integer :: ind_point
-    type(plane) :: res
+    double precision, dimension(num_dims + 1) :: res
 
     open(ifl_unit, file = trim(ifl_file), status = "old", action = "read")
     read(ifl_unit, "(a)") buf
@@ -25,17 +25,17 @@ program main
     end do
     close(ifl_unit)
 
-    call fit_plane_pca(num_points, coords, res)
+    call fit_plane_pca(num_points, num_dims, coords, res)
     deallocate(coords)
     deallocate(elems)
 
-    ! write(*, "(3(f0.6,1x,a1,1x,a1,1x),f0.6,1x,a,1x,i0)") res%a, "x", "+", res%b, "y", "+", res%c, "z", "+", res%d, "=", 0
-    write(*, "(f0.6,a1,sp,2(f0.6,a1),f0.6,ss,1x,a1,1x,i0)") res%a, "x", res%b, "y", res%c, "z", res%d, "=", 0
-    ! res%b = res%b / res%a
-    ! res%c = res%c / res%a
-    ! res%d = res%d / res%a
-    ! res%a = 1.d0
-    ! write(*, "(f0.6,a1,sp,2(f0.6,a1),f0.6,ss,1x,a1,1x,i0)") res%a, "x", res%b, "y", res%c, "z", res%d, "=", 0
+    ! write(*, "(3(f0.6,1x,a1,1x,a1,1x),f0.6,1x,a,1x,i0)") res(1), "x", "+", res(2), "y", "+", res(3), "z", "+", res(4), "=", 0
+    write(*, "(f0.6,a1,sp,2(f0.6,a1),f0.6,ss,1x,a1,1x,i0)") res(1), "x", res(2), "y", res(3), "z", res(4), "=", 0
+    ! res(2) = res(2) / res(1)
+    ! res(3) = res(3) / res(1)
+    ! res(4) = res(4) / res(1)
+    ! res(1) = 1.d0
+    ! write(*, "(f0.6,a1,sp,2(f0.6,a1),f0.6,ss,1x,a1,1x,i0)") res(1), "x", res(2), "y", res(3), "z", res(4), "=", 0
 
     stop
 end program main

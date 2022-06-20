@@ -8,10 +8,6 @@
 module fit_plane_pca_module
     implicit none
 
-    type :: plane
-        double precision :: a, b, c, d
-    end type plane
-
     ! private :: cross
 
     ! interface operator(.cross.)
@@ -20,12 +16,11 @@ module fit_plane_pca_module
 
     contains
 
-    subroutine fit_plane_pca(n, vectors, plane_fitted)
+    subroutine fit_plane_pca(n, num_dims, vectors, plane_fitted)
         implicit none
-        integer, parameter :: num_dims = 3
-        integer, intent(in) :: n
+        integer, intent(in) :: n, num_dims
         double precision, dimension(n, num_dims), intent(in) :: vectors
-        type(plane), intent(out) :: plane_fitted
+        double precision, dimension(num_dims + 1), intent(out) :: plane_fitted
         double precision, external :: ddot
         integer :: ind_point
         double precision, dimension(num_dims) :: e_points
@@ -77,40 +72,37 @@ module fit_plane_pca_module
             continue
         end if
 
-        plane_fitted%a = v_t(num_dims, 1)
-        plane_fitted%b = v_t(num_dims, 2)
-        plane_fitted%c = v_t(num_dims, 3)
-        ! plane_fitted%d = - dot_product(v_t(num_dims, :), e_points)
-        plane_fitted%d = - ddot(num_dims, v_t(num_dims, :), 1, e_points, 1)
+        plane_fitted(:num_dims) = v_t(num_dims, :)
+        ! plane_fitted(num_dims + 1) = - dot_product(v_t(num_dims, :), e_points)
+        plane_fitted(num_dims + 1) = - ddot(num_dims, v_t(num_dims, :), 1, e_points, 1)
 
         return
     end subroutine fit_plane_pca
 
+    ! ! only for 3-d situation
     ! subroutine calc_plane(vectors, plane_fitted)
     !     implicit none
     !     integer, parameter :: num_dims = 3
     !     double precision, dimension(num_dims, num_dims), intent(in) :: vectors
-    !     type(plane), intent(out) :: plane_fitted
+    !     double precision, dimension(num_dims + 1), intent(out) :: plane_fitted
     !     double precision, external :: ddot
     !     double precision, dimension(num_dims) :: norm
 
     !     ! norm = cross(vectors(2, :) - vectors(1, :) , vectors(3, :) - vectors(1, :))
     !     norm = (vectors(2, :) - vectors(1, :)) .cross. (vectors(3, :) - vectors(1, :))
     !     norm = norm / sqrt(sum(norm ** 2))
-    !     plane_fitted%a = norm(1)
-    !     plane_fitted%b = norm(2)
-    !     plane_fitted%c = norm(3)
-    !     ! plane_fitted%d = - dot_product(norm, vectors(1, :))
-    !     plane_fitted%d = - ddot(num_dims, norm, 1, vectors(1, :), 1)
+    !     plane_fitted(:num_dims) = norm
+    !     ! plane_fitted(num_dims + 1) = - dot_product(norm, vectors(1, :))
+    !     plane_fitted(num_dims + 1) = - ddot(num_dims, norm, 1, vectors(1, :), 1)
 
     !     return
     ! end subroutine calc_plane
 
-    subroutine calc_plane(vectors, plane_fitted)
+    subroutine calc_plane(num_dims, vectors, plane_fitted)
         implicit none
-        integer, parameter :: num_dims = 3
+        integer, intent(in) :: num_dims
         double precision, dimension(num_dims, num_dims), intent(in) :: vectors
-        type(plane), intent(out) :: plane_fitted
+        double precision, dimension(num_dims + 1), intent(out) :: plane_fitted
         double precision, external :: ddot
         double precision, dimension(num_dims) :: e_points
         double precision, dimension(num_dims) :: norm
@@ -155,10 +147,8 @@ module fit_plane_pca_module
 
         norm = norm / sqrt(sum(norm ** 2))
 
-        plane_fitted%a = norm(1)
-        plane_fitted%b = norm(2)
-        plane_fitted%c = norm(3)
-        plane_fitted%d = - ddot(num_dims, norm, 1, e_points, 1)
+        plane_fitted(:num_dims) = norm
+        plane_fitted(num_dims + 1) = - ddot(num_dims, norm, 1, e_points, 1)
 
         return
     end subroutine calc_plane
