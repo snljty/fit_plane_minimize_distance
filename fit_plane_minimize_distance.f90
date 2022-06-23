@@ -73,7 +73,7 @@ module fit_plane_pca_module
         end if
 
         plane_fitted(:num_dims) = v_t(num_dims, :)
-        ! plane_fitted(num_dims + 1) = - dot_product(v_t(num_dims, :), e_points)
+        ! plane_fitted(num_dims + 1) = - dprod(v_t(num_dims, :), e_points)
         plane_fitted(num_dims + 1) = - ddot(num_dims, v_t(num_dims, :), 1, e_points, 1)
 
         return
@@ -92,7 +92,7 @@ module fit_plane_pca_module
     !     norm = (vectors(2, :) - vectors(1, :)) .cross. (vectors(3, :) - vectors(1, :))
     !     norm = norm / sqrt(sum(norm ** 2))
     !     plane_fitted(:num_dims) = norm
-    !     ! plane_fitted(num_dims + 1) = - dot_product(norm, vectors(1, :))
+    !     ! plane_fitted(num_dims + 1) = - dprod(norm, vectors(1, :))
     !     plane_fitted(num_dims + 1) = - ddot(num_dims, norm, 1, vectors(1, :), 1)
 
     !     return
