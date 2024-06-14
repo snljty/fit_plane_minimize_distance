@@ -10,7 +10,7 @@ FLINKER = $(FC)
 ARCH = ar
 ARCHFLAGS = -rsc
 OPTS = -s
-LAPACKROOT := C:\lapack-3.10.1
+LAPACKROOT := C:\lapack-3.12.0
 LIBPATH := -L $(LAPACKROOT)\lib
 LIB = -l lapack -l blas
 

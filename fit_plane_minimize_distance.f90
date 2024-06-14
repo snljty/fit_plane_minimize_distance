@@ -137,7 +137,7 @@ module fit_plane_pca_module
         end do
 
         norm = 0.d0
-        do i = num_dims, 1
+        do i = num_dims, 1, -1
             if (i == num_dims) then
                 norm(i) = 1.d0
             else

@@ -40,3 +40,18 @@ program main
     stop
 end program main
 
+! program main
+!     use fit_plane_pca_module
+!     implicit none
+!     integer, parameter :: num_dims = 3
+!     double precision, dimension(num_dims, num_dims) :: coords = &
+!         reshape((/1.d0, 2.d0, 8.d0, 3.d0, 9.d0, 4.d0, 7.d0, 6.d0, 5.d0/), (/num_dims, num_dims/))
+!     double precision, dimension(num_dims + 1) :: res
+
+!     call calc_plane(num_dims, coords, res)
+
+!     write(*, "(f0.6,a1,sp,2(f0.6,a1),f0.6,ss,1x,a1,1x,i0)") res(1), "x", res(2), "y", res(3), "z", res(4), "=", 0
+
+!     stop
+! end program main
+
